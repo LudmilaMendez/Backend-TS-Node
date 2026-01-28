@@ -1,12 +1,27 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/users.service';
+import { sendWelcomeEmail } from '../services/mail.services';
 
 export const getAllUsers = (req: Request, res: Response) => {
-    const data = userService.getUsers();
-    res.json(data);
-};
+    try {
+        const data = userService.getUsers();
+        res.json(data); //por defecto es status 200
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener usuario', error }); //revisa la page localhost:3000/api/users
+    }
+}
 
-export const addUser = (req: Request, res: Response) => {
-    const user = userService.createUser(req.body);
-    res.status(201).json(user);
-};
+    export const addUser = async (req: Request, res: Response) => { //async porque usamos await dentro para enviar email
+        try {
+            console.log(req.body);
+            const user = userService.createUser(req.body);
+            if (!user) {
+                throw new Error('User data is invalid'); //fuerza un error y entra directo al try catch
+            };
+            await sendWelcomeEmail(user.email, user.name);
+            res.status(201).json(user);
+        } catch (error) {
+            res.status(400).json({ message: 'Datos de usuario invalidos', error });
+        }
+    }
+
