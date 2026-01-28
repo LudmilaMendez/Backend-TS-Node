@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/LudmilaMendez/Backend-TS-Node#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.4",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "mailersend": "^2.6.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

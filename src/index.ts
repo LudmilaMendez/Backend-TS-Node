@@ -3,6 +3,7 @@ import path from 'path';
 import { engine } from 'express-handlebars';
 import viewsRouter from './routes/views.routes';
 import usersRouter from './routes/users.routes';
+import 'dotenv/config';
 
 const app = express();
 const PORT = 3000;
