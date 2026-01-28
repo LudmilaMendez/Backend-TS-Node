@@ -11,14 +11,14 @@ export const getAllUsers = (req: Request, res: Response) => {
     }
 }
 
-    export const addUser = async (req: Request, res: Response) => { //async porque usamos await dentro para enviar email
+    export const addUser = (req: Request, res: Response) => { //async porque usamos await dentro para enviar email
         try {
             console.log(req.body);
             const user = userService.createUser(req.body);
             if (!user) {
                 throw new Error('User data is invalid'); //fuerza un error y entra directo al try catch
             };
-            // await sendWelcomeEmail(user.email, user.name); // TODO: Verificar dominio en MailerSend
+             sendWelcomeEmail(user.email, user.name); // TODO: Verificar dominio en MailerSend
             res.status(201).json(user);
         } catch (error) {
             console.log(error);
