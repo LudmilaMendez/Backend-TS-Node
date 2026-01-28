@@ -18,9 +18,10 @@ export const getAllUsers = (req: Request, res: Response) => {
             if (!user) {
                 throw new Error('User data is invalid'); //fuerza un error y entra directo al try catch
             };
-            await sendWelcomeEmail(user.email, user.name);
+            // await sendWelcomeEmail(user.email, user.name); // TODO: Verificar dominio en MailerSend
             res.status(201).json(user);
         } catch (error) {
+            console.log(error);
             res.status(400).json({ message: 'Datos de usuario invalidos', error });
         }
     }

@@ -3,13 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import handlebars from 'handlebars';
 
-const mailerSend = new MailerSend({
-    apiKey: process.env.MAILERSEND_API_KEY || '',
-});
-
-//Para verificar 
-
-console.log(' API KEY MailerSend:', process.env.MAILERSEND_API_KEY || 'No API KEY found' );
+// Lazy initialization para cargar las variables de entorno
+const getMailerSend = () => {
+    const apiKey = process.env.MAILERSEND_API_KEY;
+    console.log('API KEY MailerSend:', apiKey || 'No API KEY found');
+    return new MailerSend({
+        apiKey: apiKey || '',
+    });
+};
 
 // Compila un template Handlebars
 const compileTemplate = (templateName: string, data: any): string => {
@@ -20,12 +21,13 @@ const compileTemplate = (templateName: string, data: any): string => {
         'emails',
         `${templateName}.handlebars`
     );
-    const source = fs.readFileSync(filePath, 'utf-8'); //LEO EL ARCHIVO
-    const template = handlebars.compile(source); //ACA LO COMPILO
+    const source = fs.readFileSync(filePath, 'utf-8');
+    const template = handlebars.compile(source);
     return template(data);
 };
 
 export const sendWelcomeEmail = async (to: string, name: string) => {
+    const mailerSend = getMailerSend();
     const html = compileTemplate('welcome', { name, email: to });
 
     const sentFrom = new Sender(process.env.MAIL_FROM || '', 'Backend Demo');
